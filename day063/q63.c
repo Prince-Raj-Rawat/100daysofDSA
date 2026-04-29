@@ -1,43 +1,39 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <limits.h>
 
-#define INF 1000000000
+void dfs(int v, int n, int adj[n][n], int visited[n]) {
+    visited[v] = 1;
+    printf("%d ", v);
+    for (int i = 0; i < n; i++) {
+        if (adj[v][i] && !visited[i]) {
+            dfs(i, n, adj, visited);
+        }
+    }
+}
 
 int main() {
     int n;
     printf("Enter number of vertices: ");
     scanf("%d", &n);
 
-    int graph[n][n];
-    printf("Enter adjacency matrix (%d x %d), use -1 for no edge:\n", n, n);
+    int adj[n][n];
+    printf("Enter adjacency matrix (%d x %d):\n", n, n);
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
-            int val;
-            scanf("%d", &val);
-            if (val == -1 && i != j) graph[i][j] = INF;
-            else graph[i][j] = val;
+            scanf("%d", &adj[i][j]);
         }
     }
 
-    for (int k = 0; k < n; k++) {
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                if (graph[i][k] + graph[k][j] < graph[i][j]) {
-                    graph[i][j] = graph[i][k] + graph[k][j];
-                }
-            }
-        }
-    }
+    int s;
+    printf("Enter starting vertex: ");
+    scanf("%d", &s);
 
-    printf("\nShortest distance matrix:\n");
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
-            if (graph[i][j] >= INF/2) printf("-1 ");
-            else printf("%d ", graph[i][j]);
-        }
-        printf("\n");
-    }
+    int visited[n];
+    for (int i = 0; i < n; i++) visited[i] = 0;
+
+    printf("\nDFS Traversal Order:\n");
+    dfs(s, n, adj, visited);
+    printf("\n");
 
     return 0;
 }
